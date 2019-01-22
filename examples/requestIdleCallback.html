@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>requestIdleCallback</title>
+  </head>
+  <body>
+    <div>requestIdleCallback</div>
+  </body>
+  <script>
+    function background1() {
+      // setTimeout(() => {
+      //   console.log('background1');
+      // }, 10);
+      console.log('background1');
+    }
+    function background2() {
+      console.log('background2');
+    }
+    function background3() {
+      console.log('background3');
+    }
+    var task = [background1, background2, background3];
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(backgroundTask); // 但是只会调用一次传入的函数
+      // requestIdleCallback(backgroundTask, { timeout: 3000; }); 可以保证函数在三秒钟内执行，无论浏览器是否空闲
+    } else {
+      // 不支持requestIdleCallback, 一次性运行所有任务
+      while (task.length) {
+        setTimeout(task.shift(), 1);
+      }
+    }
+
+    function backgroundTask(deadline) {
+      // deadline.didTimeout — 如果可选的暂停时间已到则为true
+      // deadline.timeRemaining() -当前帧剩余时间, 是不断动态更新的
+      // 它不会让任务执行超过这个时间, 不过可以再次调用requestIdleCallback以安排进一步的处理
+      // 有可能的话运行下一个任务
+      console.log('timeRemaining', deadline.timeRemaining());
+      // 如果是因为timeout回调才得以执行的话, 用户就有可能会感觉到卡顿了, 因为一帧的执行时间必然已经超过16ms了
+      while (deadline.timeRemaining() > 0 && task.length > 0) {
+        console.log('while', task);
+        task.shift()();
+      }
+      // 还有未执行的任务，再次注册, 申请处理
+      console.log('why', deadline.timeRemaining());
+      // 当时间用完时, 如果列表中仍有任务, requestIdleCallback(), 以便下次有空闲时间时我们可以继续处理任务
+      if (task.length > 0) {
+        console.log('re', task);
+        requestIdleCallback(backgroundTask);
+      }
+    }
+  </script>
+</html>

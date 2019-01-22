@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>file upload</title>
+    <style>
+      .img-preview {
+        width: 100%;
+        height: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div>
+      <input type="file" id="J_file" accept="image/*" /> <img src="" class="img-preview" alt="Image preview area" />
+    </div>
+  </body>
+  <script>
+    const fileInput = document.getElementById('J_file');
+    const previewImg = document.querySelector('img');
+
+    fileInput.onchange = e => {
+      const fileInput = e.target;
+      const formData = new FormData();
+      const files = Array.from(e.target.files);
+
+      files.forEach((file, i) => {
+        formData.append(file.name + '', file);
+      });
+
+      fetch(`http://localhost:7001/upload`, {
+        method: 'POST',
+        data: formData
+      }).then(images => {
+        console.info(images);
+      });
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        previewImg.setAttribute('src', e.target.result);
+      };
+      reader.readAsDataURL(files[0]);
+    };
+  </script>
+</html>
