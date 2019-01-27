@@ -16,6 +16,10 @@ const cards = [
 		name: 'Relation'
 	},
 	{
+		path: '/typeof',
+		name: 'Typeof'
+	},
+	{
 		path: '/mouse',
 		name: 'Mouse'
 	},

@@ -1,4 +1,5 @@
 import State from './State';
 import Relation from './Relation';
+import Typeof from './typeof';
 
-export { State, Relation };
+export { State, Relation, Typeof };

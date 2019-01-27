@@ -1,4 +1,4 @@
-import { State, Relation } from '../components/Base';
+import { State, Relation, Typeof } from '../components/Base';
 import Mouse from '../components/Mouse';
 import Stock from '../components/Stock';
 
@@ -18,6 +18,10 @@ const routes = [
 	{
 		path: '/relation',
 		component: Relation
+	},
+	{
+		path: '/typeof',
+		component: Typeof
 	},
 	{
 		path: '/mouse',
