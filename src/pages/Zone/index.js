@@ -26,6 +26,10 @@ const cards = [
 	{
 		path: '/stock',
 		name: 'Stock'
+	},
+	{
+		path: '/virtualList',
+		name: 'VirtualList'
 	}
 ];
 
